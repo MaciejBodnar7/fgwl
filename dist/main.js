@@ -25,7 +25,7 @@ document.addEventListener("click", function (e) {
 const sidebar2Arr = []
 
 async function getSideBarOnStart() {
-  const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&t=The+Batman`)
+  const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&t=The+Boys`)
   const data = await resp.json()
   sidebar2Arr.push(data)
 
@@ -113,40 +113,44 @@ const hanldeAddClick = item => {
 }
 
 let imdbIds = []
+let uniq
+let objectPr = []
 
 const filterLocalStorage = () => {
   for (var i = 0; i < localStorage.length; i++) {
     // console.log(localStorage.getItem(localStorage.key(i)))
     imdbIds.push(localStorage.getItem(localStorage.key(i)))
   }
-  let uniq = [...new Set(imdbIds)]
+  uniq = [...new Set(imdbIds)]
   renderWatchlistQ(uniq)
 }
 
-async function renderWatchlistQ(item) {
-  for (let i = 0; i < item.length; i++) {
-    const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&i=${item[i]}`)
+async function renderWatchlistQ() {
+  for (let item of uniq) {
+    const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&i=${item}`)
     const data = await resp.json()
-    renderWatchlist(data)
+    objectPr.push(data)
   }
+  renderWatchlist()
 }
 
-const renderWatchlist = item => {
-  let movieRender = `
-  <div class="search-container bg-slate-200 w-full h-60" data-movies="${item.imdbID}">
-      <img class="search-movie-poster" src="${item.Poster}" alt="">
-      <button class="bg-fg-500 watchlist-btn text-fg-50" data-movies="${item.imdbID}"><i class="fa-solid fa-plus"></i>  Add to watch list</button>
-      <div class="search-container-text">
-          <p class="search-movie-title">${item.Title}</p>
-          <p class="search-movie-genre">${item.Type} ${item.Year}</p>
-          <p class="search-movie-description">description</p>
-      </div>
-  </div>
-`
-  movies.innerHTML = movieRender
+const renderWatchlist = () => {
+  const postArr = objectPr.map(item => {
+    return `
+    <div class="search-container bg-slate-200 w-full h-60"">
+        <img class="search-movie-poster" src="${item.Poster}" alt="">
+        <div class="search-container-text">
+            <p class="search-movie-title">${item.Title}</p>
+            <p class="search-movie-genre">${item.Type} ${item.Year}</p>
+            <p class="search-movie-description">description</p>
+        </div>
+    </div>`
+  })
+  movies.innerHTML = postArr.join("")
 
   const moiveSearchHideId = document.getElementById("moive-search-hide-id")
   if (moiveSearchHideId.classList.contains("moive-search-hide")) {
     moiveSearchHideId.classList.toggle("moive-search-hide")
   }
+  objectPr = []
 }
