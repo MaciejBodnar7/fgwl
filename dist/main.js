@@ -1,17 +1,28 @@
 console.log("MovieWatchlist Project")
+import { v4 as uuidv4 } from "https://jspm.dev/uuid"
 
 const searchInput = document.getElementById("search")
 const sidebarTwo = document.getElementById("sidebar-two")
 const movies = document.getElementById("movies")
 
 document.addEventListener("click", function (e) {
-  console.log(e.target.id)
+  //   console.log(e.target.id)
+  //   console.log(e.target.dataset.movies)
   if (e.target.id === "search-btn") {
-    handleClick(searchInput.value)
+    if (searchInput.value === "") {
+      console.log("empty")
+    } else {
+      handleClick(searchInput.value)
+    }
+  } else if (e.target.dataset.movies) {
+    const imdbIDmovie = e.target.dataset.movies
+    hanldeAddClick(imdbIDmovie)
+  } else if (e.target.id === "watchlist-btn-site") {
+    filterLocalStorage()
   }
 })
 
-let sidebar2Arr = []
+const sidebar2Arr = []
 
 async function getSideBarOnStart() {
   const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&t=The+Batman`)
@@ -71,7 +82,7 @@ const render = async item => {
       const movieRender = `
   <div class="search-container bg-slate-200 w-full h-60" data-movies="${objects.imdbID}">
       <img class="search-movie-poster" src="${objects.Poster}" alt="">
-      <button class="bg-fg-500 watchlist-btn text-fg-50"><i class="fa-solid fa-plus"></i>  Add to watch list</button>
+      <button class="bg-fg-500 watchlist-btn text-fg-50" data-movies="${objects.imdbID}"><i class="fa-solid fa-plus"></i>  Add to watch list</button>
       <div class="search-container-text">
           <p class="search-movie-title">${objects.Title}</p>
           <p class="search-movie-genre">${objects.Type} ${objects.Year}</p>
@@ -83,6 +94,7 @@ const render = async item => {
     })
   )
   movies.innerHTML = postArr.join("")
+
   const moiveSearchHideId = document.getElementById("moive-search-hide-id")
   if (moiveSearchHideId.classList.contains("moive-search-hide")) {
     moiveSearchHideId.classList.toggle("moive-search-hide")
@@ -94,4 +106,47 @@ async function movieDescription(item) {
   const data = await resp.json()
   let plot = data.Plot
   return plot
+}
+
+const hanldeAddClick = item => {
+  window.localStorage.setItem(uuidv4(), item)
+}
+
+let imdbIds = []
+
+const filterLocalStorage = () => {
+  for (var i = 0; i < localStorage.length; i++) {
+    // console.log(localStorage.getItem(localStorage.key(i)))
+    imdbIds.push(localStorage.getItem(localStorage.key(i)))
+  }
+  let uniq = [...new Set(imdbIds)]
+  renderWatchlistQ(uniq)
+}
+
+async function renderWatchlistQ(item) {
+  for (let i = 0; i < item.length; i++) {
+    const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&i=${item[i]}`)
+    const data = await resp.json()
+    renderWatchlist(data)
+  }
+}
+
+const renderWatchlist = item => {
+  let movieRender = `
+  <div class="search-container bg-slate-200 w-full h-60" data-movies="${item.imdbID}">
+      <img class="search-movie-poster" src="${item.Poster}" alt="">
+      <button class="bg-fg-500 watchlist-btn text-fg-50" data-movies="${item.imdbID}"><i class="fa-solid fa-plus"></i>  Add to watch list</button>
+      <div class="search-container-text">
+          <p class="search-movie-title">${item.Title}</p>
+          <p class="search-movie-genre">${item.Type} ${item.Year}</p>
+          <p class="search-movie-description">description</p>
+      </div>
+  </div>
+`
+  movies.innerHTML = movieRender
+
+  const moiveSearchHideId = document.getElementById("moive-search-hide-id")
+  if (moiveSearchHideId.classList.contains("moive-search-hide")) {
+    moiveSearchHideId.classList.toggle("moive-search-hide")
+  }
 }

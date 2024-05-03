@@ -14,7 +14,7 @@
     />
     <link rel="stylesheet" href="../src/output.css" />
     <link rel="stylesheet" href="style.css" />
-    <title>FGwl: Your Movie and TV Show Watchlist</title>
+    <title>FGwl: Watchlist</title>
   </head>
   <body class="bg-fg-bg-dark">
     <main class="bg-fg-bg-dark">
@@ -32,9 +32,11 @@
           </div>
         </div>
         <div class="flex justify-end">
-          <button id="watchlist-btn-site" class="wl-btn h-10 pl-4 pr-4 bg-fg-500 text-fg-50 font-medium"
-            >Watchlist</button
-          >
+          <a href="#">
+            <button id="homepage-btn-site" class="wl-btn h-10 pl-4 pr-4 bg-fg-500 text-fg-50 font-medium"
+              >Homepage</button
+            >
+          </a>
         </div>
       </header>
     </main>
@@ -65,20 +67,6 @@
         </div>
       </section>
     </main>
-
-    <main id="moive-search-hide-id" class="container moive-search-hide">
-      <section class="movies">
-        <h2 class="text-center text-4xl text-fg-50 font-black">Your searched for: </h2>
-        <div id="movies" class="flex flex-col gap-6">
-          <div class="bg-slate-200 w-full h-60"></div>
-          <div class="bg-slate-200 w-full h-60"></div>
-          <div class="bg-slate-200 w-full h-60"></div>
-          <div class="bg-slate-200 w-full h-60"></div>
-          <div class="bg-slate-200 w-full h-60"></div>
-        </div>
-      </section>
-    </main>
-
     <script src="main.js" type="module"></script>
   </body>
 </html>
