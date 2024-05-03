@@ -5,12 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico" />
     <link rel="manifest" href="/site.webmanifest" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="../src/output.css" />
     <link rel="stylesheet" href="style.css" />
     <title>FGwl: Your Movie and TV Show Watchlist</title>
   </head>
-  <body>
-    <h1 class="bg-fg-bg-dark text-fg-50">23232</h1>
+  <body class="bg-black">
+    <main class="bg-fg-bg-dark">
+      <header class="container header">
+        <div>
+          <img src="../assets/logo.png" alt="" class="w-24 min-w-24" />
+        </div>
+        <div class="header-inputs h-10 flex">
+          <input type="search" class="h-10 w-full" placeholder="Search FGwl" />
+          <div class="bg-white h-10 text-fg-950 text-2xl flex items-center justify-center w-10 min-w-10">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="flex justify-end">
+          <a href="#"><button class="wl-btn h-10 pl-4 pr-4 bg-fg-400 text-fg-950 font-medium">Watchlist</button></a>
+        </div>
+      </header>
+    </main>
+
+    <main>
+      <section class="landing-section">
+        <h1 class="text-fg-50">Find your movie!</h1>
+      </section>
+    </main>
+
     <script src="main.js" type="module"></script>
   </body>
 </html>
