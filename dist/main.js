@@ -14,15 +14,15 @@ document.addEventListener("click", function (e) {
 let sidebar2Arr = []
 
 async function getSideBarOnStart() {
-  const resp = await fetch(`http://www.omdbapi.com/?apikey=40cffa7f&t=The+Batman`)
+  const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&t=The+Batman`)
   const data = await resp.json()
   sidebar2Arr.push(data)
 
-  const resp2 = await fetch(`http://www.omdbapi.com/?apikey=40cffa7f&t=Dune:+Part+Two`)
+  const resp2 = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&t=Dune:+Part+Two`)
   const data2 = await resp2.json()
   sidebar2Arr.push(data2)
 
-  const resp3 = await fetch(`http://www.omdbapi.com/?apikey=40cffa7f&t=Shōgun`)
+  const resp3 = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&t=Shōgun`)
   const data3 = await resp3.json()
   sidebar2Arr.push(data3)
 
@@ -50,7 +50,7 @@ const renderSideBarOnStart = () => {
 }
 
 async function handleClick(item) {
-  const resp = await fetch(`http://www.omdbapi.com/?apikey=40cffa7f&s=${item}`)
+  const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&s=${item}`)
   const data = await resp.json()
   render(data)
 }
@@ -60,9 +60,16 @@ const render = async item => {
   const moviesArr = item.Search
   const postArr = await Promise.all(
     moviesArr.map(async objects => {
-      const description = await movieDescription(objects.imdbID)
+      let description = await movieDescription(objects.imdbID)
+      if (objects.Poster === "N/A") {
+        objects.Poster = "https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
+      }
+      if (description === "N/A") {
+        description = "We cant find description for this movie, sorry!"
+      }
+
       const movieRender = `
-  <div class="search-container bg-slate-200 w-full h-60">
+  <div class="search-container bg-slate-200 w-full h-60" data-movies="${objects.imdbID}">
       <img class="search-movie-poster" src="${objects.Poster}" alt="">
       <button class="bg-fg-500 watchlist-btn text-fg-50"><i class="fa-solid fa-plus"></i>  Add to watch list</button>
       <div class="search-container-text">
@@ -83,7 +90,7 @@ const render = async item => {
 }
 
 async function movieDescription(item) {
-  const resp = await fetch(`http://www.omdbapi.com/?apikey=40cffa7f&i=${item}`)
+  const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&i=${item}`)
   const data = await resp.json()
   let plot = data.Plot
   return plot

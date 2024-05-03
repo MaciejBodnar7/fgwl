@@ -158,9 +158,13 @@ input[type="search"] {
 }
 
 .search-container-text :nth-child(1) {
+  width: 500px;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
   font-size: 2rem;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
 }
 
 .search-container-text :nth-child(2) {
