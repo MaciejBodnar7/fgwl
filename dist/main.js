@@ -134,18 +134,21 @@ async function renderWatchlistQ() {
   renderWatchlist()
 }
 
-const renderWatchlist = () => {
-  const postArr = objectPr.map(item => {
-    return `
+const renderWatchlist = async () => {
+  const postArr = await Promise.all(
+    objectPr.map(async item => {
+      let description = await movieDescription(item.imdbID)
+      return `
     <div class="search-container bg-slate-200 w-full h-60"">
         <img class="search-movie-poster" src="${item.Poster}" alt="">
         <div class="search-container-text">
             <p class="search-movie-title">${item.Title}</p>
             <p class="search-movie-genre">${item.Type} ${item.Year}</p>
-            <p class="search-movie-description">description</p>
+            <p class="search-movie-description">${description}</p>
         </div>
     </div>`
-  })
+    })
+  )
   movies.innerHTML = postArr.join("")
 
   const moiveSearchHideId = document.getElementById("moive-search-hide-id")
