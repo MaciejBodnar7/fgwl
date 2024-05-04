@@ -2,7 +2,7 @@
 
 ![FireGem Watchlist Logo](https://i.ibb.co/MN3C9xH/logo.png)
 
-https://maciejbodnar7.github.io/fgwl/dist/index.html
+https://maciejbodnar7.github.io/fgwl/dist/index.html <br />
 FireGem Watchlist is a web application that allows users to search for movies, add them to their watchlist, and view their watchlist later. It utilizes HTML, CSS, JavaScript, and Tailwind CSS for styling.
 
 ## Features
