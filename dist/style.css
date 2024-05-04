@@ -198,6 +198,17 @@ input[type="search"] {
   outline: 0px solid #f0fdfb;
 }
 
+.removewatchlist-btn {
+  position: absolute;
+  padding: 0.5em 1em;
+  left: 85%;
+  top: 7%;
+  width: fit-content;
+  border-radius: 5px;
+  transition: outline 0.04s;
+  outline: 0px solid #f0fdfb;
+}
+
 .watchlist-btn:hover {
   outline: 2px solid #f0fdfb;
 }
@@ -299,7 +310,19 @@ input[type="search"] {
     position: absolute;
     padding: 0.4em 1em;
     left: 90%;
-    top: 0%;
+    top: 5%;
+    width: 50px;
+    height: 35px;
+    border-radius: 5px;
+    transition: outline 0.04s;
+    outline: 0px solid #f0fdfb;
+  }
+  .removewatchlist-btn {
+    overflow: hidden;
+    position: absolute;
+    padding: 0.4em 1em;
+    left: 90%;
+    top: 5%;
     width: 50px;
     height: 35px;
     border-radius: 5px;

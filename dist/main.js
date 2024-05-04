@@ -4,21 +4,25 @@ import { v4 as uuidv4 } from "https://jspm.dev/uuid"
 const searchInput = document.getElementById("search")
 const sidebarTwo = document.getElementById("sidebar-two")
 const movies = document.getElementById("movies")
+const htwoOfMovies = document.getElementById("htwo-of-movies")
 
 document.addEventListener("click", function (e) {
-  //   console.log(e.target.id)
-  //   console.log(e.target.dataset.movies)
+  // console.log(e.target.id)
+  // console.log(e.target.dataset)
   if (e.target.id === "search-btn") {
     if (searchInput.value === "") {
       console.log("empty")
     } else {
       handleClick(searchInput.value)
+      searchInput.value = ""
     }
   } else if (e.target.dataset.movies) {
     const imdbIDmovie = e.target.dataset.movies
     hanldeAddClick(imdbIDmovie)
   } else if (e.target.id === "watchlist-btn-site") {
     filterLocalStorage()
+  } else if (e.target.dataset.moviestoremove) {
+    deleteFilterLocalStorage(e.target.dataset.moviestoremove)
   }
 })
 
@@ -63,7 +67,16 @@ const renderSideBarOnStart = () => {
 async function handleClick(item) {
   const resp = await fetch(`https://www.omdbapi.com/?apikey=40cffa7f&s=${item}`)
   const data = await resp.json()
-  render(data)
+
+  if (data.Response === "True") {
+    render(data)
+  } else {
+    htwoOfMovies.textContent = "Unable to find what you’re looking for. Please try another search."
+    const moiveSearchHideId = document.getElementById("moive-search-hide-id")
+    if (moiveSearchHideId.classList.contains("moive-search-hide")) {
+      moiveSearchHideId.classList.toggle("moive-search-hide")
+    }
+  }
 }
 
 const render = async item => {
@@ -78,11 +91,11 @@ const render = async item => {
       if (description === "N/A") {
         description = "We cant find description for this movie, sorry!"
       }
-
+      htwoOfMovies.textContent = `Your search results for: ${searchInput.value}`
       const movieRender = `
   <div class="search-container bg-slate-200 w-full h-60" data-movies="${objects.imdbID}">
       <img class="search-movie-poster" src="${objects.Poster}" alt="">
-      <button class="bg-fg-500 watchlist-btn text-fg-50" data-movies="${objects.imdbID}"><i class="fa-solid fa-plus"></i>  Add to watch list</button>
+      <button class="bg-fg-500 watchlist-btn text-fg-50" data-movies="${objects.imdbID}"><i class="fa-solid fa-plus"></i>  Add to watchlist</button>
       <div class="search-container-text">
           <p class="search-movie-title">${objects.Title}</p>
           <p class="search-movie-genre">${objects.Type} ${objects.Year}</p>
@@ -108,16 +121,33 @@ async function movieDescription(item) {
   return plot
 }
 
+let verifyImdbIds = []
+let verifyUniqs = []
+
 const hanldeAddClick = item => {
-  window.localStorage.setItem(uuidv4(), item)
+  localStorage.setItem(uuidv4(), item)
+  for (let i = 0; i < localStorage.length; i++) {
+    // console.log(localStorage.getItem(localStorage.key(i)))
+    verifyImdbIds.push(localStorage.getItem(localStorage.key(i)))
+  }
+  verifyUniqs = [...new Set(verifyImdbIds)]
+  localStorage.clear()
+  for (let i = 0; i < verifyUniqs.length; i++) {
+    localStorage.setItem(uuidv4(), verifyUniqs[i])
+  }
 }
+
+// const hanldeAddClick = item => {
+//   console.log(item)
+//   localStorage.setItem(uuidv4(), item)
+// }
 
 let imdbIds = []
 let uniq
 let objectPr = []
 
 const filterLocalStorage = () => {
-  for (var i = 0; i < localStorage.length; i++) {
+  for (let i = 0; i < localStorage.length; i++) {
     // console.log(localStorage.getItem(localStorage.key(i)))
     imdbIds.push(localStorage.getItem(localStorage.key(i)))
   }
@@ -137,10 +167,12 @@ async function renderWatchlistQ() {
 const renderWatchlist = async () => {
   const postArr = await Promise.all(
     objectPr.map(async item => {
+      htwoOfMovies.textContent = `Your watchlist:`
       let description = await movieDescription(item.imdbID)
       return `
-    <div class="search-container bg-slate-200 w-full h-60"">
+    <div class="search-container bg-slate-200 w-full h-60" data-moviestoremove="${item.imdbID}">
         <img class="search-movie-poster" src="${item.Poster}" alt="">
+        <button class="bg-fg-500 removewatchlist-btn text-fg-50" data-moviestoremove="${item.imdbID}"><i class="fa-solid fa-minus"></i>  Remove</button>
         <div class="search-container-text">
             <p class="search-movie-title">${item.Title}</p>
             <p class="search-movie-genre">${item.Type} ${item.Year}</p>
@@ -156,4 +188,23 @@ const renderWatchlist = async () => {
     moiveSearchHideId.classList.toggle("moive-search-hide")
   }
   objectPr = []
+}
+
+const deleteFilterLocalStorage = item => {
+  console.log(item)
+
+  const arrayLocal = Object.entries(localStorage)
+
+  const post = arrayLocal.filter(items => {
+    return items[1] === item
+  })
+  localStorage.removeItem(post[0][0])
+
+  const moiveSearchHideId = document.getElementById("moive-search-hide-id")
+  moiveSearchHideId.classList.toggle("moive-search-hide")
+  imdbIds = []
+  uniq
+  objectPr = []
+  movies.inert = ``
+  filterLocalStorage()
 }
