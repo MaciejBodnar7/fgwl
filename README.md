@@ -22,7 +22,7 @@ To run this project locally, follow these steps:
 
 ## Site Information
 
-- **FireGem WatchList Site**: [FireGem Watchlist]([https://fgwl.io](https://maciejbodnar7.github.io/fgwl/dist/index.html))
+- **FireGem WatchList Site**: [fgwl](https://maciejbodnar7.github.io/fgwl/dist/index.html)
 - **Colors**:
   - Main Color: #18ada6
   - Light Text Color: #f0fdfb
